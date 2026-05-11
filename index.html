@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8" />
+	<link href="style.css" rel="stylesheet"/>
+	<title>Курсовой проект визуализации работы алгоритмов Оберемок К.С.</title>
+	<script src="https://api-maps.yandex.ru/2.1/?apikey=ba9eb395-4f10-42a6-8859-073246e00fb9&lang=ru_RU" type="text/javascript"></script>
+	<script src="js/Dijkstra.js"></script>
+	<script src="js/Evklid.js"></script>
+	<script src="js/Ford_bellman.js"></script>
+	<script src="js/Ford_folkerson.js"></script>
+	<script src="js/Kun.js"></script>
+	<script src="js/main.js"></script>
+</head>
+<body>
+	<div class="tabs">
+		<div id="dijkstra" class="tab active" onclick="clickMenu('dijkstra')">Дейкстра</div>
+		<div id="ford_bellman" class="tab" onclick="clickMenu('ford_bellman')">Форд–Беллман</div>
+		<div id="evklid" class="tab" onclick="clickMenu('evklid')">Евклид</div>
+		<div id="kun" class="tab" onclick="clickMenu('kun')">Кун</div>
+		<div id="ford_folkerson" class="tab" onclick="clickMenu('ford_folkerson')">Форд–Фолкерсон</div>
+	</div>
+	<div id="dijkstra_content">
+		<div class="container">
+			<div class="panel">
+				<button onclick="dijkstra.setMode('add')">
+					Добавление точек
+				</button>
+
+				<button onclick="dijkstra.setMode('connect')">
+					Соединение вершин
+				</button>
+				<button onclick="dijkstra.startAlgorithm()">
+					Запустить алгоритм
+				</button>
+
+				<button onclick="dijkstra.nextStep()">
+					Следующий шаг
+				</button>
+
+				<button onclick="dijkstra.reset()">
+					Сброс
+				</button>
+
+				<button onclick="dijkstra.clearMap()">
+					Очистить карту
+				</button>
+
+				<hr>
+
+				<p>
+					Инструкция:
+				</p>
+
+				<ol>
+					<li>Кликните по карте для добавления точек.</li>
+					<li>Первая точка — старт.</li>
+					<li>Последняя точка — финиш.</li>
+					<li>Нажмите «Запустить алгоритм».</li>
+					<li>Используйте «Следующий шаг».</li>
+				</ol>
+
+				<h3>Таблица расстояний</h3>
+
+				<table id="dijkstra_table">
+					<thead>
+						<tr>
+							<th>Вершина</th>
+							<th>dist</th>
+							<th>Посещена</th>
+							<th>prev</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+
+				<h3>Лог алгоритма</h3>
+				<div class="log" id="dijkstra_log"></div>
+			</div>
+
+			<div id="map" style="width:100%;height:700px"></div>
+		</div>
+	</div>
+	<div id="ford_bellman_content" class="hide">
+		<div class="container">
+			<div class="panel">
+				<button onclick="ford_bellman.setMode('add')">Добавление точек</button>
+				<button onclick="ford_bellman.setMode('connect')">Соединение вершин</button>
+				<button onclick="ford_bellman.startAlgorithm()">Запустить алгоритм</button>
+				<button onclick="ford_bellman.nextStep()">Следующий шаг</button>
+				<button onclick="ford_bellman.reset()">Сброс</button>
+				<button onclick="ford_bellman.clearMap()">Очистить карту</button>
+				<hr>
+				<p>Инструкция:</p>
+				<ol>
+					<li>Кликните по карте для добавления точек.</li>
+					<li>Первая точка — старт.</li>
+					<li>Соедините вершины (режим «Соединение вершин», клик по двум точкам).</li>
+					<li>Нажмите «Запустить алгоритм».</li>
+					<li>Используйте «Следующий шаг».</li>
+				</ol>
+				<h3>Таблица расстояний</h3>
+				<table id="ford_bellman_table">
+					<thead>
+						<tr>
+							<th>Вершина</th>
+							<th>dist</th>
+							<th>prev</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+				<h3>Лог алгоритма</h3>
+				<div class="log" id="ford_bellman_log"></div>
+			</div>
+			<div id="ford_bellman_map" style="width:100%;height:700px"></div>
+		</div>
+	</div>
+	<div id="evklid_content" class="hide">
+		<div class="container">
+			<div class="panel">
+				<div>
+					<label>Число A: <input type="number" id="evklid_numA" value="252"></label><br/>
+					<label>Число B: <input type="number" id="evklid_numB" value="105"></label><br/>
+				</div>
+
+				<button onclick="evklid.start()">Старт</button>
+				<button onclick="evklid.nextStep()">Следующий шаг</button>
+				<button onclick="evklid.reset()">Сброс</button>
+
+				<h3>Таблица шагов</h3>
+				<table id="evklid_table">
+					<thead>
+						<tr>
+							<th>Шаг</th>
+							<th>A</th>
+							<th>B</th>
+							<th>q = A div B</th>
+							<th>r = A mod B</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+
+				<h3>Пояснение</h3>
+				<div class="log" id="evklid_log"></div>
+			</div>
+
+			<svg id="evklid_graph">
+				<defs>
+					<marker id="arrow" markerWidth="10" markerHeight="10" refX="10" refY="3" orient="auto" markerUnits="strokeWidth">
+						<path d="M0,0 L0,6 L9,3 z" fill="#ff6b6b" />
+					</marker>
+				</defs>
+			</svg>
+		</div>
+	</div>
+	<div id="kun_content" class="hide">
+		<div class="container">
+			<div class="panel">
+				<button onclick="kun.setMode('add_left')">Добавить левую вершину</button>
+				<button onclick="kun.setMode('add_right')">Добавить правую вершину</button>
+				<button onclick="kun.setMode('connect')">Соединить вершины</button>
+				<button onclick="kun.startAlgorithm()">Запустить алгоритм</button>
+				<button onclick="kun.nextStep()">Следующий шаг</button>
+				<button onclick="kun.reset()">Сброс</button>
+				<button onclick="kun.clearMap()">Очистить карту</button>
+				<hr>
+				<p>Инструкция:</p>
+				<ol>
+					<li>Выберите режим «Добавить левую вершину» и кликните на карте.</li>
+					<li>Выберите «Добавить правую вершину» и кликните на карте.</li>
+					<li>Перейдите в режим «Соединить вершины»: кликните сначала на левую вершину, затем на правую.</li>
+					<li>Нажмите «Запустить алгоритм».</li>
+					<li>Используйте «Следующий шаг».</li>
+				</ol>
+				<h3>Таблица паросочетания</h3>
+				<table id="kun_table">
+					<thead>
+						<tr>
+							<th>Левая вершина</th>
+							<th>Правая вершина</th>
+							<th>Посещена (правая)</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+				<h3>Лог алгоритма</h3>
+				<div class="log" id="kun_log"></div>
+			</div>
+			<div id="kun_map" style="width:100%; height:700px;"></div>
+		</div>
+	</div>
+	<div id="ford_folkerson_content" class="hide">
+		<div class="container">
+			<div class="panel">
+				<button onclick="ford_folkerson.setMode('add')">Добавление точек</button>
+				<button onclick="ford_folkerson.setMode('connect')">Соединение вершин</button>
+				<button onclick="ford_folkerson.startAlgorithm()">Запустить алгоритм</button>
+				<button onclick="ford_folkerson.nextStep()">Следующий шаг</button>
+				<button onclick="ford_folkerson.reset()">Сброс</button>
+				<button onclick="ford_folkerson.clearMap()">Очистить карту</button>
+				<hr>
+				<p>Инструкция:</p>
+				<ol>
+					<li>Кликните по карте для добавления точек.</li>
+					<li>Первая точка — <b>исток</b>, последняя — <b>сток</b>.</li>
+					<li>Перейдите в режим «Соединение вершин»: кликните сначала на начальную вершину, затем на конечную. В появившемся окне введите пропускную способность.</li>
+					<li>Нажмите «Запустить алгоритм».</li>
+					<li>Используйте «Следующий шаг» для пошаговой демонстрации.</li>
+				</ol>
+				<h3>Таблица потоков</h3>
+				<table id="ford_folkerson_table">
+					<thead>
+						<tr>
+							<th>Ребро</th>
+							<th>Поток</th>
+							<th>Проп. способность</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+				<h3>Лог алгоритма</h3>
+				<div class="log" id="ford_folkerson_log"></div>
+			</div>
+			<div id="ford_folkerson_map" style="width:100%; height:700px;"></div>
+		</div>
+	</div>
+	<script>init();</script>
+</body>
+</html>
